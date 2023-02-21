@@ -1,0 +1,33 @@
+{
+    "name": "letkode/helpers",
+    "type": "library",
+    "description": "Common Helpers for project Letkode App",
+    "keywords": ["helpers", "letkode"],
+    "homepage": "https://github.com/letkode",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LetKode App",
+            "homepage": "https://letkode.com/"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-iconv": "*",
+        "nesbot/carbon": "^2.65",
+        "kwn/number-to-words": "^2.6",
+        "jawira/case-converter": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Letkode\\Helpers\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Letkode\\Helpers\\Tests\\": "tests/"
+        }
+    }
+}
