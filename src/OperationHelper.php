@@ -4,17 +4,17 @@ namespace Letkode\Helpers;
 
 final class OperationHelper
 {
-    public static function comparateValues(string $operator, mixed $valueA, mixed $valueB): bool
+    public static function comparateValues(string $operator, int $a, int $b): bool
     {
         return match ($operator) {
-            '<', 'lessThan' => $valueA < $valueB,
-            '<=', 'max', 'lessEqualThan' => $valueA <= $valueB,
-            '>', 'greaterThan' => $valueA > $valueB,
-            '>=', 'min', 'greaterEqualThan' => $valueA >= $valueB,
-            '===', 'identical' => $valueA === $valueB,
-            '!==', 'unidentified' => $valueA !== $valueB,
-            '!=', 'distinct' => $valueA != $valueB,
-            default => $valueA == $valueB,
+            '<', 'lessThan' => $a < $b,
+            '<=', 'max', 'lessEqualThan' => $a <= $b,
+            '>', 'greaterThan' => $a > $b,
+            '>=', 'min', 'greaterEqualThan' => $a >= $b,
+            '===', 'identical' => $a === $b,
+            '!==', 'unidentified' => $a !== $b,
+            '!=', 'distinct' => $a != $b,
+            default => $a == $b,
         };
     }
 }
