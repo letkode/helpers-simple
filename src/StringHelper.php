@@ -39,12 +39,12 @@ final class StringHelper
 
     public static function getterByString(string $tag): string
     {
-        return self::stringToCase(sprintf('get_%s', $tag), 'camel', '_');
+        return self::stringCase(sprintf('get_%s', $tag), 'toCamel');
     }
 
     public static function setterByString(string $tag): string
     {
-        return self::stringToCase(sprintf('set_%s', $tag), 'camel', '_');
+        return self::stringCase(sprintf('set_%s', $tag), 'toCamel');
     }
 
     public static function slugify($string, $separator = '-', $nullable = false): ?string
@@ -72,7 +72,7 @@ final class StringHelper
         return $string;
     }
 
-    public static function stringToCase(string $string, string $case, bool $hasClear = true): string
+    public static function stringCase(string $string, string $case, bool $hasClear = true): string
     {
         $formats = ['camel', 'pascal', 'snake', 'kebab', 'dot', 'train', 'cobol', 'ada', 'macro', 'title'];
 
@@ -260,6 +260,27 @@ final class StringHelper
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*_";
 
         return substr(str_shuffle($chars), 0, $length);
+    }
+
+    public static function replaceValuesText(string $text, array $values): string
+    {
+        $values = array_filter($values, fn($v) => !is_array($v));
+
+        $keys = array_map(fn($k) => sprintf('#[%s]#', $k), array_keys($values));
+        $values = array_values($values);
+
+        return str_replace($keys, $values, $text);
+    }
+
+    public static function convertEmailUnique(string $string): string
+    {
+        if (!filter_var($string, FILTER_VALIDATE_EMAIL)) {
+            throw new \RuntimeException('Invalid Email');
+        }
+
+        list($username, $domain) = explode('@', $string);
+
+        return sprintf('%s+%s@%s', $username, strtotime('now'), $domain);
     }
 
 }

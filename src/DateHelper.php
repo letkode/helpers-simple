@@ -31,9 +31,12 @@ final class DateHelper
         return sprintf('%d de %s de %d', $date->day, $date->monthName, $date->year);
     }
 
-    public static function dateRangeFromDateStart($date, int $quantityInterval = 1, string $typeInterval = 'day'): array
-    {
-        $date = is_string($date) ? new DateTime($date):$date;
+    public static function dateRangeFromDateStart(
+        string|DateTime $date,
+        int $quantityInterval = 1,
+        string $typeInterval = 'day'
+    ): array {
+        $date = is_string($date) ? new DateTime($date) : $date;
 
         $range[] = new DateTime($date->format(self::FORMAT_SHOW));
         for ($i = 1; $i < $quantityInterval; $i++) {
@@ -45,11 +48,11 @@ final class DateHelper
         return $range;
     }
 
-    public static function agoShort($datetime, bool $time = true): string
+    public static function agoShort(string|DateTime $datetime, bool $time = true): string
     {
         $now = new DateTime('now');
 
-        $datetime = is_object($datetime) ? $datetime:new DateTime($datetime);
+        $datetime = is_string($datetime) ? new DateTime($datetime) : $datetime;
         $interval = $datetime->diff($now);
 
         $arrayHumanize = self::humanizeText($interval, $time);
@@ -253,4 +256,74 @@ final class DateHelper
     {
         return [];
     }
+
+
+    public static function isWeekend(DateTime|string $date, bool $ignoreSaturday = false): bool
+    {
+        $date = is_string($date) ? new DateTime($date) : $date;
+
+        $days = [6,7];
+        if ($ignoreSaturday) {
+            unset($days[0]);
+        }
+
+        return in_array($date->format('N'), $days);
+    }
+
+    public static function ignoreWeekday(string|DateTime $date, bool $withSaturday = true): DateTime
+    {
+        $date = is_string($date) ? new DateTime($date) : $date;
+
+        $subDay = match ($date->format('N')) {
+            1, 2, 3 => $withSaturday ? 2 : 1,
+            default => 0,
+        };
+
+        return $date->modify(sprintf('%s days ago', $subDay));
+    }
+
+    public static function isGreaterEqualDate(
+        string|DateTime $date,
+        string|DateTime $start,
+        string $format = 'Y-m-d'
+    ): bool {
+        $date = is_string($date) ? DateTime::createFromFormat($format, $date) : $date;
+        $start = is_string($start) ? DateTime::createFromFormat($format, $start) : $start;
+
+        return $date >= $start;
+    }
+
+    public static function isLessEqualDate(string|DateTime $date, string|DateTime $end, string $format = 'Y-m-d'): bool
+    {
+        $date = is_string($date) ? DateTime::createFromFormat($format, $date) : $date;
+        $end = is_string($end) ? DateTime::createFromFormat($format, $end) : $end;
+
+        return $date <= $end;
+    }
+
+    public static function isBetweenDate(
+        string|DateTime $date,
+        string|DateTime $start,
+        string|DateTime $end,
+        string $format = 'Y-m-d'
+    ): bool {
+        return self::isGreaterEqualDate($date, $start, $format) && self::isLessEqualDate($date, $end, $format);
+    }
+
+    public static function isExistDateByTypeRange(
+        string $typeRange,
+        string|DateTime $date,
+        string|DateTime|null $start,
+        string|DateTime|null $end,
+        string $format = 'Y-m-d'
+    ): bool
+    {
+        return match ($typeRange) {
+            'greater-equal' => self::isGreaterEqualDate($date, $start), $format,
+            'less-equal' => self::isLessEqualDate($date, $end, $format),
+            'between' => self::isBetweenDate($date, $start, $end, $format),
+            default => false,
+        };
+    }
+
 }

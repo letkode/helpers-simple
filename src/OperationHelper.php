@@ -4,7 +4,7 @@ namespace Letkode\Helpers;
 
 final class OperationHelper
 {
-    public static function comparateValues(string $operator, int $a, int $b): bool
+    public static function compareValues(string $operator, int $a, int $b): bool
     {
         return match ($operator) {
             '<', 'lessThan' => $a < $b,
