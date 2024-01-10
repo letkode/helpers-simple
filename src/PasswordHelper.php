@@ -9,7 +9,7 @@ class PasswordHelper
         $patterUpper = '/[A-Z]/';
         $patterLower = '/[a-z]/';
         $patterNumber = '/\d/';
-        $patternSpecialChar = '/[!@#$%^&*()_+\-=\[\]{};\':"\\|,.<>\/?]/';
+        $patternSpecialChar = '/[!@#$%^&*()_+\-=\[\]{};\':"|,.<>\/?]/';
 
         $invalid['length'] = strlen($password) < 8;
         $invalid['upper'] = !preg_match($patterUpper, $password);
