@@ -53,5 +53,4 @@ final class NumberHelper
 
         return implode(' ', $arr);
     }
-
 }

@@ -4,15 +4,12 @@ namespace Letkode\Helpers;
 
 final class ConditionsQuerySqlHelper
 {
-
     public static function getConditionsByType(
         bool $isQueryBuilder = true,
         array $inputsWithAttributes = [],
         array $values = [],
         bool $isValueAsParams = true
-    ): array
-    {
-
+    ): array {
         $conditions = self::getConditionsQuery($inputsWithAttributes, $values, $isValueAsParams);
 
         if ($isQueryBuilder) {
@@ -48,15 +45,27 @@ final class ConditionsQuerySqlHelper
             $eval = $sqlAttr['eval'] ?? $sqlAttr['eval_filter'] ?? 'equal';
             $format = $sqlAttr['format'] ?? $sqlAttr['format_filter'] ?? 'string';
 
-            $condition = self::getEvalConditions($nameSQL, ($isValueAsParams ? $key : $valueInput), $eval, $format, $isValueAsParams);
+            $condition = self::getEvalConditions(
+                $nameSQL,
+                ($isValueAsParams ? $key : $valueInput),
+                $eval,
+                $format,
+                $isValueAsParams
+            );
 
             $conditions[$key] = $condition;
         }
 
         return $conditions;
     }
-    private static function getEvalConditions(string $name, string $value, ?string $eval, ?string $format, bool $isValueAsParams = true): string
-    {
+
+    private static function getEvalConditions(
+        string $name,
+        string $value,
+        ?string $eval,
+        ?string $format,
+        bool $isValueAsParams = true
+    ): string {
         $formatCondition = self::getFormatConditions($format, $isValueAsParams);
 
         return match ($eval) {
@@ -75,17 +84,17 @@ final class ConditionsQuerySqlHelper
     {
         return match ($format) {
             'date' => $isValueAsParams ?
-                "DATE(%s) %s :%s"
+                'DATE(%s) %s :%s'
                 : "DATE(%s) %s '%s'",
             'dateRange' => $isValueAsParams ?
-                "DATE(%s) BETWEEN :start AND :end"
+                'DATE(%s) BETWEEN :start AND :end'
                 : "DATE(%s) BETWEEN '%s' AND '%s'",
             'range' => $isValueAsParams ?
-                "%s BETWEEN :start AND :end"
-                : "%s BETWEEN %s AND %s",
-            'nullable' => "%s %s",
-            'contains' => $isValueAsParams ? "%s %s %%:%s%%" : "%s %s '%%%s%%'",
-            default => $isValueAsParams ? "%s %s :%s" : "%s %s '%s'",
+                '%s BETWEEN :start AND :end'
+                : '%s BETWEEN %s AND %s',
+            'nullable' => '%s %s',
+            'contains' => $isValueAsParams ? '%s %s %%:%s%%' : "%s %s '%%%s%%'",
+            default => $isValueAsParams ? '%s %s :%s' : "%s %s '%s'",
         };
     }
 }

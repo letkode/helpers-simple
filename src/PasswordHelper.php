@@ -20,7 +20,8 @@ class PasswordHelper
         return empty(array_filter($invalid));
     }
 
-    public static function generatorPasswordRandom($length, $includeSymbol = false): string {
+    public static function generatorPasswordRandom($length, $includeSymbol = false): string
+    {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $symbol = '!@#$%^&*()_+-={}[]|:;"<>,.?/~`';
 

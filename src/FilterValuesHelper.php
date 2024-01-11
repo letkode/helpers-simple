@@ -59,7 +59,12 @@ final class FilterValuesHelper
                 $eval = $condition['eval'];
 
                 $check = match ($type) {
-                    'date_range' => DateHelper::isExistDateByTypeRange($eval, $val, $condition['value']['start'], $condition['value']['end']),
+                    'date_range' => DateHelper::isExistDateByTypeRange(
+                        $eval,
+                        $val,
+                        $condition['value']['start'],
+                        $condition['value']['end']
+                    ),
                     'string' => str_contains($val, $condition['value']),
                     default => $val == $condition['value'],
                 };
@@ -73,5 +78,4 @@ final class FilterValuesHelper
 
         return array_diff_key($data, array_flip($ignoreByFilter));
     }
-
 }

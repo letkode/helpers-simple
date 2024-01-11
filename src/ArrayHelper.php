@@ -6,7 +6,6 @@ use Exception;
 
 final class ArrayHelper
 {
-
     public static function sortByKey(array $values, string $key): array
     {
         uasort($values, static fn($a, $b) => ($a[$key] ?? 0) <=> ($b[$key] ?? 0));
@@ -17,8 +16,8 @@ final class ArrayHelper
 
     public static function strContainsInArray(string $haystack, array $needles): bool
     {
-        foreach($needles as $needle) {
-            if(str_contains($haystack, $needle)) {
+        foreach ($needles as $needle) {
+            if (str_contains($haystack, $needle)) {
                 return true;
             }
         }
@@ -33,7 +32,7 @@ final class ArrayHelper
         foreach ($searchArray as $search) {
             if (isset($currentValue[$search])) {
                 $currentValue = $currentValue[$search];
-            }else{
+            } else {
                 return $default;
             }
         }
@@ -44,11 +43,14 @@ final class ArrayHelper
     public static function convertValuesToDoctrine($values): array
     {
         $returnValues = [];
-        array_walk($values, function (&$value, $key) use (&$returnValues) {
-            $key = StringHelper::stringCase($key, 'lCamel', '_');
+        array_walk(
+            $values,
+            function (&$value, $key) use (&$returnValues) {
+                $key = StringHelper::stringCase($key, 'lCamel', '_');
 
-            $returnValues[$key] = $value;
-        });
+                $returnValues[$key] = $value;
+            }
+        );
 
         return $returnValues;
     }
@@ -111,7 +113,7 @@ final class ArrayHelper
                     break;
                 }
 
-                $array[] = $prefix.$rng;
+                $array[] = $prefix . $rng;
             }
 
             $prefix = $range[$index - 1];
@@ -182,8 +184,7 @@ final class ArrayHelper
         string $pregMatch = '/(#\[)\w+(\]#)/',
         string $startMatch = '#[',
         string $endMatch = ']#'
-    ): array
-    {
+    ): array {
         $array = [];
         foreach ($object as $key => $item) {
             $val = $item;
@@ -221,12 +222,16 @@ final class ArrayHelper
         foreach ($data as $keyVal => $value) {
             $keyArray = explode($separator, $keyVal);
 
-            $tmpArray = array_reduce(array_reverse($keyArray), function ($carry, $item) use ($value) {
-                if (empty($carry)) {
-                    return [$item => $value];
-                }
-                return array($item => $carry);
-            }, []);
+            $tmpArray = array_reduce(
+                array_reverse($keyArray),
+                function ($carry, $item) use ($value) {
+                    if (empty($carry)) {
+                        return [$item => $value];
+                    }
+                    return array($item => $carry);
+                },
+                []
+            );
 
             $values = array_merge_recursive($values, $tmpArray);
         }
@@ -267,5 +272,4 @@ final class ArrayHelper
         // Devolver el array simple
         return $result;
     }
-
 }

@@ -8,5 +8,4 @@ final class FileHelper
     {
         return '';
     }
-
 }

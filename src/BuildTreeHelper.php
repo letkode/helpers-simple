@@ -4,7 +4,6 @@ namespace Letkode\Helpers;
 
 final class BuildTreeHelper
 {
-
     /**
      * Obtiene un arreglo con la relación padre-hijo.
      *      Direcciones:
@@ -73,9 +72,15 @@ final class BuildTreeHelper
     {
         $groupsChild = [];
         if ($onlyDirect) {
-            $groupsChild = array_keys(array_filter($treeGroups, function ($p, $c) use ($parent) {
-                return $p === $parent;
-            }, ARRAY_FILTER_USE_BOTH));
+            $groupsChild = array_keys(
+                array_filter(
+                    $treeGroups,
+                    function ($p, $c) use ($parent) {
+                        return $p === $parent;
+                    },
+                    ARRAY_FILTER_USE_BOTH
+                )
+            );
         } else {
             $lastLevel = false;
             while (!$lastLevel) {
@@ -145,11 +150,11 @@ final class BuildTreeHelper
         $prevLevel = 0;
         $treeData = [];
         for ($i = $qtyLevel; $i >= 1; --$i) {
-            ${"level_".$i} = [];
+            ${'level_' . $i} = [];
 
             if ($i === $qtyLevel) {
                 foreach (array_filter($data, static fn($p) => "level_{$i}" === $p['_level']) as $lastLevel) {
-                    ${"level_".$i}[$lastLevel['parent_id']][$lastLevel['_id']] = $lastLevel;
+                    ${'level_' . $i}[$lastLevel['parent_id']][$lastLevel['_id']] = $lastLevel;
                 }
 
                 $prevLevel = $i;
@@ -158,16 +163,16 @@ final class BuildTreeHelper
             }
 
             foreach (array_filter($data, static fn($l) => "level_{$i}" === $l['_level']) as $item) {
-                if (!isset(${"level_".$prevLevel}[$item['_id']])) {
+                if (!isset(${'level_' . $prevLevel}[$item['_id']])) {
                     continue;
                 }
 
-                $item['children'] = array_values(${"level_".$prevLevel}[$item['_id']]);
-                ${"level_".$i}[$item['parent_id']][$item['_id']] = $item;
+                $item['children'] = array_values(${'level_' . $prevLevel}[$item['_id']]);
+                ${'level_' . $i}[$item['parent_id']][$item['_id']] = $item;
             }
 
             if ($i === 1) {
-                $treeData = ${"level_".$i};
+                $treeData = ${'level_' . $i};
             }
 
             $prevLevel = $i;
@@ -177,6 +182,4 @@ final class BuildTreeHelper
 
         return $currentValues ? array_values($currentValues) : [];
     }
-
-
 }

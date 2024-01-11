@@ -9,7 +9,7 @@ use DateTime;
 
 final class DateHelper
 {
-    const FORMAT_SHOW = 'Y-m-d H:i:s';
+    private const FORMAT_SHOW = 'Y-m-d H:i:s';
 
     private static array $holidays = [];
 
@@ -72,33 +72,33 @@ final class DateHelper
         $diffText = [];
 
         if (abs($years) > 0) {
-            $diffText['year'] = abs($years).' año'.(abs($years) == 1 ? '':'s');
+            $diffText['year'] = abs($years) . ' año' . (abs($years) == 1 ? '' : 's');
             if (abs($months) > 0) {
-                $diffText['month'] = ' y '.abs($months).' mes'.(abs($months) == 1 ? '':'es');
+                $diffText['month'] = ' y ' . abs($months) . ' mes' . (abs($months) == 1 ? '' : 'es');
             }
         } elseif (abs($months) > 0) {
-            $diffText['month'] = abs($months).' mes'.(abs($months) == 1 ? '':'es');
+            $diffText['month'] = abs($months) . ' mes' . (abs($months) == 1 ? '' : 'es');
             if (abs($days) > 0) {
-                $diffText['day'] = ' y '.abs($days).' día'.(abs($days) == 1 ? '':'s');
+                $diffText['day'] = ' y ' . abs($days) . ' día' . (abs($days) == 1 ? '' : 's');
             }
         } elseif (abs($days) > 0) {
-            $diffText['day'] = abs($days).' día'.(abs($days) == 1 ? '':'s');
+            $diffText['day'] = abs($days) . ' día' . (abs($days) == 1 ? '' : 's');
             if (abs($hours) > 0 && $time) {
-                $diffText['hour'] = ' y '.abs($hours).' hora'.(abs($hours) == 1 ? '':'s');
+                $diffText['hour'] = ' y ' . abs($hours) . ' hora' . (abs($hours) == 1 ? '' : 's');
             }
         } elseif (abs($hours) > 0 && $time) {
-            $diffText['hour'] = abs($hours).' hora'.(abs($hours) == 1 ? '':'s');
+            $diffText['hour'] = abs($hours) . ' hora' . (abs($hours) == 1 ? '' : 's');
             if (abs($minutes) > 0) {
-                $diffText['minute'] = ' y '.abs($minutes).' minuto'.(abs($minutes) == 1 ? '':'s');
+                $diffText['minute'] = ' y ' . abs($minutes) . ' minuto' . (abs($minutes) == 1 ? '' : 's');
             }
         } elseif (abs($minutes) > 0 && $time) {
-            $diffText['minute'] = abs($minutes).' minuto'.(abs($minutes) == 1 ? '':'s');
+            $diffText['minute'] = abs($minutes) . ' minuto' . (abs($minutes) == 1 ? '' : 's');
             if (abs($seconds) > 0) {
-                $diffText['second'] = ' y '.abs($minutes).' segundo'.(abs($seconds) == 1 ? '':'s');
+                $diffText['second'] = ' y ' . abs($minutes) . ' segundo' . (abs($seconds) == 1 ? '' : 's');
             }
         } else {
             if ($time) {
-                $diffText['second'] = abs($seconds).' segundo'.(abs($seconds) == 1 ? '':'s');
+                $diffText['second'] = abs($seconds) . ' segundo' . (abs($seconds) == 1 ? '' : 's');
             }
         }
 
@@ -209,7 +209,7 @@ final class DateHelper
     ): void {
         $interval = DateInterval::createFromDateString($dateInterval);
         $period = $excludeStartDate ? new DatePeriod($start, $interval, $end, DatePeriod::EXCLUDE_START_DATE)
-            :new DatePeriod($start, $interval, $end);
+            : new DatePeriod($start, $interval, $end);
 
         foreach ($period as $p) {
             $date = $p->format($formatDate);
@@ -238,7 +238,7 @@ final class DateHelper
             }
 
             $dt = new DateTime($date);
-            $dayNum = date("w", strtotime($lastDay));
+            $dayNum = date('w', strtotime($lastDay));
             $result = false;
 
             if (isset(self::$holidays[$date])) {
@@ -262,7 +262,7 @@ final class DateHelper
     {
         $date = is_string($date) ? new DateTime($date) : $date;
 
-        $days = [6,7];
+        $days = [6, 7];
         if ($ignoreSaturday) {
             unset($days[0]);
         }
@@ -280,6 +280,22 @@ final class DateHelper
         };
 
         return $date->modify(sprintf('%s days ago', $subDay));
+    }
+
+    public static function isExistDateByTypeRange(
+        string $typeRange,
+        string|DateTime $date,
+        string|DateTime|null $start,
+        string|DateTime|null $end,
+        string $format = 'Y-m-d'
+    ): bool {
+        return match ($typeRange) {
+            'greater-equal' => self::isGreaterEqualDate($date, $start),
+            $format,
+            'less-equal' => self::isLessEqualDate($date, $end, $format),
+            'between' => self::isBetweenDate($date, $start, $end, $format),
+            default => false,
+        };
     }
 
     public static function isGreaterEqualDate(
@@ -309,21 +325,4 @@ final class DateHelper
     ): bool {
         return self::isGreaterEqualDate($date, $start, $format) && self::isLessEqualDate($date, $end, $format);
     }
-
-    public static function isExistDateByTypeRange(
-        string $typeRange,
-        string|DateTime $date,
-        string|DateTime|null $start,
-        string|DateTime|null $end,
-        string $format = 'Y-m-d'
-    ): bool
-    {
-        return match ($typeRange) {
-            'greater-equal' => self::isGreaterEqualDate($date, $start), $format,
-            'less-equal' => self::isLessEqualDate($date, $end, $format),
-            'between' => self::isBetweenDate($date, $start, $end, $format),
-            default => false,
-        };
-    }
-
 }

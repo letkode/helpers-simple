@@ -68,6 +68,4 @@ final class FileDirectoryHelper
     {
         return array_replace_recursive(self::IGNORE_FILE_PARAMS, $ignoreFilesAttribute);
     }
-
-
 }
