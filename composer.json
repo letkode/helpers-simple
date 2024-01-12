@@ -16,9 +16,9 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "nesbot/carbon": "^2.65",
-        "kwn/number-to-words": "^2.6",
-        "jawira/case-converter": "^3.5"
+        "nesbot/carbon": "^2.72",
+        "kwn/number-to-words": "^2.8",
+        "jawira/case-converter": "^v3.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9",
