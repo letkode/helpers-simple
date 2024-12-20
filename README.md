@@ -7,5 +7,5 @@ Getting Started
 ---------------
 
 ```
-$ composer require letkode/helpers
+$ composer require letkode/helpers-simple
 ```
